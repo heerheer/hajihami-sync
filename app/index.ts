@@ -1,6 +1,14 @@
 import { Elysia } from 'elysia';
 
-const app = new Elysia()
+export const app = new Elysia({aot:false})
+  .onError(({ code, error }: any) => {
+    return  {
+      success: false,
+      message: "An error has occurred while requesting",
+      code: `${error.status} (${code})`,
+    };
+  })
+
   .get('/', () => 'Hello hajihami-sync!')
   .get('/health', () => 'OK')
   .get('/ping', () => 'pong')
@@ -10,7 +18,8 @@ const app = new Elysia()
     version: '1.0.0',
     description: 'A simple Elysia application for hajihami-sync',
   }))
-  .listen(3000);
+
+
 
 console.log(
   `🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`

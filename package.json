@@ -3,6 +3,10 @@
   "module": "src/index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "bun run  --watch index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
