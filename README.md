@@ -1,0 +1,2 @@
+# hajihami-sync
+将基于hajihami的Notion数据库同步至其他地方,例如cf的D1或者是本地的sqlite
