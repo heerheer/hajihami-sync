@@ -13,11 +13,13 @@
  */
 import { NotionAPI } from 'notion-client';
 import type { Block } from 'notion-types';
+import process from 'process';
+import type { Audio } from './db/schema';
 
 export async function getAllCollectionData(limit = 99999) {
     const notion = new NotionAPI();
-    const collection_id = Bun.env.SOURCE_COLLECTION_ID;
-    const collection_view_id = Bun.env.SOURCE_COLLECTION_VIEW_ID;
+    const collection_id = process.env.SOURCE_COLLECTION_ID;
+    const collection_view_id = process.env.SOURCE_COLLECTION_VIEW_ID;
 
     if (!collection_id || !collection_view_id) {
         return []
@@ -52,7 +54,7 @@ export async function getAllCollectionData(limit = 99999) {
     return (await applySchemaToBlocks(
         collection.recordMap.collection?.[collection_id]?.value?.schema ?? {},
         all_blocks
-    )).map(x => { return { ...x.propertiesFormatted, update_time: x.last_edited_time, created_time: x.created_time } });
+    )).map(x => { return { ...x.propertiesFormatted, update_time: x.last_edited_time, created_time: x.created_time } as any as Audio });
 }
 
 type Schema = Record<string, { name: string; type: string }>;
@@ -113,3 +115,24 @@ export async function applySchemaToBlocks(
     });
 }
 
+// 保存为 JSON 文件
+export async function saveToJson(data: any, filePath: string) {
+  await Bun.write(filePath, JSON.stringify(data, null, 2));
+  return filePath;
+}
+
+
+
+// 保存到 D1（伪代码，需根据 D1 API 文档实现）
+export async function saveToD1(data: any[], d1Url: string, d1Token: string) {
+  // 假设 D1 提供 REST API
+  const res = await fetch(d1Url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${d1Token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+  return await res.json();
+}

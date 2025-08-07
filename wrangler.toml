@@ -1,0 +1,10 @@
+name = "hajihami-sync"
+main = "index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = [ "nodejs_compat" ]
+
+[[d1_databases]]
+binding = "D1"
+database_name = "hajihami-sync"
+database_id = "3a3e7ebd-127b-4eb4-b391-b9b7bcd5d819"
+migrations_dir = "drizzle"

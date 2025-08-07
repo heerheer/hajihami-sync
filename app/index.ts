@@ -1,23 +1,27 @@
+import { count, sql } from 'drizzle-orm';
 import { Elysia } from 'elysia';
+import { audios } from './db/schema';
 
-export const app = new Elysia({aot:false})
+import process from 'process'
+import {config} from 'dotenv'
+import { getDb } from './db';
+config()
+
+export const app = new Elysia({ aot: false, serve: { idleTimeout: 0 } })
   .onError(({ code, error }: any) => {
-    return  {
+    return {
       success: false,
       message: "An error has occurred while requesting",
       code: `${error.status} (${code})`,
     };
   })
-
-  .get('/', () => 'Hello hajihami-sync!')
-  .get('/health', () => 'OK')
-  .get('/ping', () => 'pong')
-  .get('/version', () => '1.0.0')
-  .get('/info', () => ({
-    name: 'hajihami-sync',
-    version: '1.0.0',
-    description: 'A simple Elysia application for hajihami-sync',
-  }))
+  .get('/', async ({}) => {
+    const db = getDb()
+    return{
+      total:await db.select({ count: count() }).from(audios),
+    }
+  })
+  .use(import('./routes/sync'))
 
 
 
