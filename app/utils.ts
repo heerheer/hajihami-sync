@@ -120,19 +120,3 @@ export async function saveToJson(data: any, filePath: string) {
   await Bun.write(filePath, JSON.stringify(data, null, 2));
   return filePath;
 }
-
-
-
-// 保存到 D1（伪代码，需根据 D1 API 文档实现）
-export async function saveToD1(data: any[], d1Url: string, d1Token: string) {
-  // 假设 D1 提供 REST API
-  const res = await fetch(d1Url, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${d1Token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  });
-  return await res.json();
-}
